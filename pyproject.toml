@@ -1,0 +1,18 @@
+[project]
+name = "detached-secxxii"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pillow>=11.0.0",
+    "python-docx>=1.1.2",
+    "pyyaml>=6.0.2",
+    "streamlit>=1.40.2",
+    "streamlit-authenticator>=0.4.1",
+    "streamlit-calendar>=1.2.0",
+    "streamlit-option-menu>=0.4.0",
+]
+
+[tool.uv.workspace]
+members = ["app_1", "app_2"]

@@ -1,0 +1,5 @@
+.venv
+.git
+.vscode/
+.gitignore
+oraclevm2/
