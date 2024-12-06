@@ -20,5 +20,5 @@ COPY . .
 EXPOSE 8501
 
 # Command to run your application
-CMD ["streamlit", "run", "src/home.py"]
+CMD ["streamlit", "run", "src/home.py", "--config", ".streamlit/config.toml"]
 

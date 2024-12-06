@@ -10,5 +10,5 @@ COPY . .
 
 EXPOSE 8501
 
-CMD ["streamlit", "run", "src/home.py"]
+CMD ["streamlit", "run", "src/home.py", "--config", ".streamlit/config.toml"]
 
