@@ -7,9 +7,10 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from sqlalchemy import text, inspect
 from langgraph.graph import StateGraph, END
+from langchain_core.runnables.config import RunnableConfig
 
 from agent_state import AgentState
-from database_classes.tables import Cliente, Comanda, LogComanda, Registro, Fluxo 
+from database_classes.tables import Cliente, Comanda, LogComanda, Registro, Fluxo, User
 from database import db_session
 
 def get_database_schema(engine):
@@ -43,7 +44,7 @@ def get_current_user(state: AgentState, config: RunnableConfig):
         print("No user ID provided in the configuration.")
         return state
 
-    session = SessionLocal()
+    session, _ = db_session()
     try:
         user = session.query(User).filter(User.id == int(user_id)).first()
         if user:
@@ -65,8 +66,9 @@ class CheckRelevance(BaseModel):
     )
 
 def check_relevance(state: AgentState, config: RunnableConfig):
+    _, engine = db_session()
     question = state["question"]
-    schema = get_database_schema(engine)
+    schema = get_database_schema(engine=engine)
     print(f"Checking relevance of the question: {question}")
     system = """You are an assistant that determines whether a given question is related to the following database schema.
 
@@ -96,6 +98,7 @@ class ConvertToSQL(BaseModel):
     )
 
 def convert_nl_to_sql(state: AgentState, config: RunnableConfig):
+    _, engine = db_session()
     question = state["question"]
     current_user = state["current_user"]
     schema = get_database_schema(engine)
@@ -126,7 +129,7 @@ For example, alias 'food.name' as 'food_name' and 'food.price' as 'price'.
 
 def execute_sql(state: AgentState):
     sql_query = state["sql_query"].strip()
-    session = SessionLocal()
+    session, _ = db_session()
     print(f"Executing SQL query: {sql_query}")
     try:
         result = session.execute(text(sql_query))

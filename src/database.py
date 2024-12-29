@@ -14,4 +14,4 @@ DATABASE_URL = f'postgresql://{user}:{password}@localhost:5432/{dbname}'
 def db_session(url:str=DATABASE_URL):
     engine = create_engine(url=url)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    return SessionLocal
+    return SessionLocal(), engine
